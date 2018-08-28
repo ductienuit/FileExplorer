@@ -8,7 +8,8 @@ class Item {
      var extention:String
      var parentDir:String
      var childDir:String
-        var file:File
+     var file:File
+     var check:Boolean
      //var date: Date
 
     constructor(name: String, extention: String, parentDir: String, childDir: String, file:File) {
@@ -17,6 +18,7 @@ class Item {
         this.parentDir = parentDir
         this.childDir = childDir
         this.file = file
+        this.check=false
         //this.date = date
     }
 

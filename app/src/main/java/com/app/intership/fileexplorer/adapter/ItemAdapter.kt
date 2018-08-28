@@ -102,6 +102,9 @@ class ItemAdapter(context: Context, listFile: MutableList<Item>) : RecyclerView.
                 context!!.startActivity(intent)
             }
         }
+        holder.checkItem.setOnCheckedChangeListener { buttonView, isChecked ->
+            item.check=isChecked
+        }
     }
 
     fun getMimeType(url: String): String? {
