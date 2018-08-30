@@ -1,5 +1,6 @@
 package com.app.intership.fileexplorer
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,19 +14,21 @@ import com.app.intership.fileexplorer.adapter.ItemAdapter
 import com.app.intership.fileexplorer.modal.Item
 import java.io.File
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.TextView
-import android.widget.Toast
+import android.view.ViewGroup
+import org.w3c.dom.Text
 import uk.co.markormesher.android_fab.FloatingActionButton
 import uk.co.markormesher.android_fab.SpeedDialMenuAdapter
 import uk.co.markormesher.android_fab.SpeedDialMenuItem
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
+import android.R.attr.path
+import android.graphics.Color
+import android.widget.*
 
 
 class ExplorerActivity : AppCompatActivity() {
-
     private lateinit var fileList :MutableList<Item>
+    lateinit var listNames:MutableList<String>
     private lateinit var itemAdapter:ItemAdapter
     lateinit var recyclerView: RecyclerView
     lateinit var fab:FloatingActionButton
@@ -69,12 +72,63 @@ class ExplorerActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun addControl() {
         recyclerView = findViewById(R.id.recyclerView)
         fab = findViewById(R.id.fab)
 
         fab.speedDialMenuAdapter = speedDialMenuAdapter
         fab.contentCoverEnabled = true
+
+        doomTextView()
+
+        var btnHistory = findViewById<Button>(R.id.btnHistory)
+        btnHistory.setOnClickListener(){
+            
+        }
+    }
+
+    private fun doomTextView() {
+        var path = root.absolutePath
+
+        val listNames = getNameFolders(path)
+        for(i in listNames)
+        {
+            var txtToolbar = TextView(this)
+            txtToolbar.text = "/$i"
+            txtToolbar.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            txtToolbar.textSize = 13F
+            txtToolbar.setTextColor(Color.WHITE)
+            txtToolbar.setOnClickListener(){
+                var toolPath = path.substring(0,path.indexOf(i)+i.length)
+
+                val intent = Intent(this, ExplorerActivity::class.java)
+                var data = Bundle()
+
+                data.putString("path", toolPath)
+                intent.putExtra("data",data)
+
+                startActivity(intent)
+            }
+
+            var linearLayout:LinearLayout = findViewById(R.id.toolbar_layout)
+            linearLayout.addView(txtToolbar)
+        }
+    }
+
+    private fun getNameFolders(path:String):MutableList<String>
+    {
+        val listName = mutableListOf<String>()
+        var pathTemp = path
+
+        while(!pathTemp.isEmpty())
+        {
+            val temp = pathTemp.substring(pathTemp.lastIndexOf("/")+1)
+            listName.add(temp)
+            pathTemp = pathTemp.substring(0,pathTemp.lastIndexOf(temp)-1)
+        }
+        listName.reverse()
+        return listName
     }
 
     private fun listDir(f: File) {

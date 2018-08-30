@@ -5,11 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ExplorerActivity">
-
+    <include layout="@layout/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"/>
+
     <uk.co.markormesher.android_fab.FloatingActionButton
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab"
